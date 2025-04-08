@@ -29,13 +29,13 @@ async def lifespan(app: FastAPI):
         port=settings.DB_PORT
     )
     await app.state.db.connect()
-    await app.state.db.drop_tables()
+    # await app.state.db.drop_tables()
     await app.state.db.initdb()
 
     yield
 
     LOGGER.info("SHUTTING DOWN...")
-    # await app.state.db.disconnect()
+    await app.state.db.disconnect()
     LOGGER.info("DATABASE CLOSED SUCCESSFULLY")
 
 
