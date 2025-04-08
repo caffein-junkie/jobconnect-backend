@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS technicians (
     location GEOGRAPHY(POINT, 4326) NOT NULL,
     service_types TEXT[] NOT NULL CHECK (array_length(service_types, 1) > 0),
     experience_years NUMERIC CHECK (experience_years >= 0),
+    average_rating NUMERIC,
     is_verified BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
     last_login TIMESTAMPTZ,

@@ -5,6 +5,7 @@ from .technician import router as technician_router
 from .booking import router as booking_router
 from .review import router as review_router
 from .payment import router as payment_router
+from .search_technician import router as search_router
 
 router: APIRouter = APIRouter()
 
@@ -14,3 +15,4 @@ router.include_router(technician_router, tags=["Technicians"])
 router.include_router(booking_router, tags=["Bookings"])
 router.include_router(review_router, tags=["Reviews"])
 router.include_router(payment_router, tags=["Payments"])
+router.include_router(search_router, tags=["Search Technicians"])

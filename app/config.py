@@ -24,5 +24,9 @@ class Settings(BaseSettings):
     # SECURITY
     BCRYPT_ROUNDS: int = 5
 
+    # API
+    GOOGLE_API_KEY: str = os.environ.get("GOOGLE_KEY")
+    GEO_KEY: str = os.environ.get("GEO_KEY")
+
 
 settings: Settings = Settings()
