@@ -22,10 +22,8 @@ class ClientRepository:
             location_name=record["location_name"],
             latitude=record["longitude"],
             longitude=record["longitude"],
-            is_active=record["is_active"],
             client_id=str(record["client_id"]),
             password_hash=record["password_hash"],
-            last_login=record["last_login"],
             created_at=record["created_at"]
         )
 
@@ -43,10 +41,8 @@ class ClientRepository:
                 location_name,
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
-                is_active,
-                last_login,
                 created_at
-            FROM clients 
+            FROM client 
             """
         )
         return [self._record_to_client(r) for r in records]
@@ -65,10 +61,8 @@ class ClientRepository:
                 location_name,
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
-                is_active,
-                last_login,
                 created_at
-            FROM clients 
+            FROM client 
             WHERE client_id = $1
             """,
             uuid.UUID(client_id)
@@ -89,10 +83,8 @@ class ClientRepository:
                 location_name,
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
-                is_active,
-                last_login,
                 created_at
-            FROM clients 
+            FROM client 
             WHERE email = $1
             """,
             email
@@ -107,11 +99,11 @@ class ClientRepository:
         hashed_password: str = SecurityUtils.hash_password(client_data.password)
         point: str = f"POINT({client_data.longitude} {client_data.latitude})"
         query: str = """
-        INSERT INTO clients (
+        INSERT INTO client (
             name, surname, email, phone_number,
-            password_hash, location_name, location, is_active
+            password_hash, location_name, location
         )
-        VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromText($7), $8)
+        VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromText($7))
         """
         await self.db.execute(
             query,
@@ -122,7 +114,6 @@ class ClientRepository:
             hashed_password,
             client_data.location_name,
             point,
-            client_data.is_active
         )
         return await self.get_by_email(client_data.email)
     
@@ -142,7 +133,6 @@ class ClientRepository:
             "email": update_data.email,
             "phone_number": update_data.phone_number,
             "location_name": update_data.location_name,
-            "is_active": update_data.is_active
         }
 
         if update_data.password is not None:
@@ -171,7 +161,7 @@ class ClientRepository:
             return await self.get_by_id(client_id)
         
         query: str = f"""
-        UPDATE clients SET {', '.join(updates)}
+        UPDATE client SET {', '.join(updates)}
         WHERE client_id = ${param_count}
         """
         params.append(uuid.UUID(client_id))
@@ -181,32 +171,18 @@ class ClientRepository:
     
     async def update_last_login(self, client_id: str) -> None:
         await self.db.execute(
-            "UPDATE clients SET last_login = $1 WHERE client_id = $2",
+            "UPDATE client SET last_login = $1 WHERE client_id = $2",
             datetime.now(timezone.utc()),
-            uuid.UUID(client_id)
-        )
-
-    async def deactivate(self, client_id: str) -> None:
-        """"""
-        await self.db.execute(
-            "UPDATE clients SET is_active = FALSE WHERE client_id = $1",
             uuid.UUID(client_id)
         )
 
     async def delete(self, client_id: str) -> None:
         """"""
-        result = await self.db.execute(
-            "DELETE FROM clients WHERE client_id = $1",
+        await self.db.execute(
+            "DELETE FROM client WHERE client_id = $1",
             uuid.UUID(client_id)
-        )
-        if result == "DELETE 0":
-            raise NotFoundException("Client not found")
+            )
         
     async def add_favorite_technicians(self, client_id: str, technician_id: str) -> bool:
         """"""
-        favorite = await self.db.fetchrow(
-            """
-            SELECT * FROM favorite_technicians
-            WHERE client_id = $1 AND technician_id = $2
-            """
-            )
+        raise NotImplementedError("Add favorites will be implemented shortly.")

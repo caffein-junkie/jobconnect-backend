@@ -15,11 +15,7 @@ from app.config import settings
 
 class SearchService:
     def __init__(self):
-        self.api_key, self.geo_key = self._load_api_keys()
-        self.gmaps_client = gm.Client(key=self.api_key)
-
-    def _load_api_keys(self) -> tuple[str, str]:
-        return settings.GOOGLE_API_KEY, settings.GEO_KEY
+        self.gmaps_client = gm.Client(key=settings.GOOGLE_API_KEY)
 
     def _kilometer_to_meter(self, km: float) -> int:
         return int(km * 1000)
@@ -66,7 +62,7 @@ class SearchService:
     def get_current_location(self) -> dict:
         ip_loc_url = 'http://ipinfo.io/json'
         urlopen(ip_loc_url)  # Just to trigger external IP usage
-        geo_loc_url = f"https://www.googleapis.com/geolocation/v1/geolocate?key={self.geo_key}"
+        geo_loc_url = f"https://www.googleapis.com/geolocation/v1/geolocate?key={settings.GEOLOCATION_KEY}"
         response = requests.post(geo_loc_url, json={"considerIp": True})
         location_data = response.json()
         return location_data['location']

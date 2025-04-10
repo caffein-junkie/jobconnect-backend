@@ -25,13 +25,12 @@ class TechnicianRepository:
             latitude=record["longitude"],
             longitude=record["longitude"],
             service_types=record["service_types"],
-            average_rating=record["average_rating"],
             is_verified=record["is_verified"],
-            is_active=record["is_active"],
             technician_id=str(record["technician_id"]),
             password_hash=record["password_hash"],
-            last_login=record["last_login"],
-            created_at=record["created_at"]
+            created_at=record["created_at"],
+            is_available=record["is_available"],
+            experience_years=record["experience_years"]
         )
     
     async def get_all(self) -> List[TechnicianInDB]:
@@ -49,12 +48,11 @@ class TechnicianRepository:
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
                 service_types,
-                average_rating,
                 is_verified,
-                is_active,
-                last_login,
+                experience_years,
+                is_available,
                 created_at
-            FROM technicians 
+            FROM technician 
             """
         )
         return [TechnicianRepository.record_to_technician(r) for r in records]
@@ -74,12 +72,11 @@ class TechnicianRepository:
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
                 service_types,
-                average_rating,
                 is_verified,
-                is_active,
-                last_login,
+                experience_years,
+                is_available,
                 created_at
-            FROM technicians 
+            FROM technician 
             WHERE technician_id = $1
             """,
             uuid.UUID(technician_id)
@@ -101,12 +98,11 @@ class TechnicianRepository:
                 ST_X(location::geometry) AS longitude,
                 ST_Y(location::geometry) AS latitude,
                 service_types,
-                average_rating,
                 is_verified,
-                is_active,
-                last_login,
+                experience_years,
+                is_available,
                 created_at
-            FROM technicians 
+            FROM technician 
             WHERE email = $1
             """,
             email
@@ -121,10 +117,10 @@ class TechnicianRepository:
         hashed_password: str = SecurityUtils.hash_password(technician_data.password)
         point: str = f"POINT({technician_data.longitude} {technician_data.latitude})"
         query: str = """
-        INSERT INTO technicians (
+        INSERT INTO technician (
             name, surname, email, phone_number,
             password_hash, location_name, location,
-            service_types, average_rating, is_verified, is_active
+            service_types, is_verified, experience_years, is_available
         )
         VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromText($7), $8, $9, $10, $11)
         """
@@ -138,19 +134,18 @@ class TechnicianRepository:
             technician_data.location_name,
             point,
             technician_data.service_types,
-            technician_data.average_rating,
             technician_data.is_verified,
-            technician_data.is_active if technician_data.is_active is not None else True
+            technician_data.experience_years,
+            technician_data.is_available
         )
         return await self.get_by_email(technician_data.email)
     
     async def delete(self, technician_id: str) -> bool:
         """"""
-        result = await self.db.execute(
-            "DELETE FROM technicians WHERE technician_id = $ 1",
+        await self.db.execute(
+            "DELETE FROM technician WHERE technician_id = $ 1",
             uuid.UUID(technician_id)
             )
-        return result == "DELETE 0"
     
     async def update(self, technician_id: str, update_data: TechnicianUpdate) -> TechnicianInDB:
         """"""
@@ -165,9 +160,7 @@ class TechnicianRepository:
             "phone_number": update_data.phone_number,
             "location_name": update_data.location_name,
             "service_types": update_data.service_types,
-            "average_rating": update_data.average_rating,
             "is_verified": update_data.is_verified,
-            "is_active": update_data.is_active
         }
 
         # Handle password update
@@ -199,26 +192,11 @@ class TechnicianRepository:
             return await self.get_by_id(technician_id)
 
         query: str = f"""
-        UPDATE technicians SET {', '.join(updates)}
+        UPDATE technician SET {', '.join(updates)}
         WHERE technician_id = ${param_count}
         """
         params.append(uuid.UUID(technician_id))
 
         await self.db.execute(query, *params)
         return await self.get_by_id(technician_id)
-    
-    async def deactivate(self, technician_id: str) -> bool:
-        """"""
-        await self.db.execute(
-            "UPDATE technicians SET is_active = FALSE WHERE technician_id = $1",
-            technician_id
-            )
-        return True
-    
-    async def update_last_login(self, client_id: str) -> None:
-        await self.db.execute(
-            "UPDATE technicians SET last_login = $1 WHERE technician_id = $2",
-            datetime.now(timezone.utc()),
-            uuid.UUID(client_id)
-        )
     

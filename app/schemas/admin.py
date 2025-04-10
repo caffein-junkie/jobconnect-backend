@@ -27,7 +27,6 @@ class AdminBase(BaseModel):
 class AdminCreate(AdminBase):
     password: str = Field(..., min_length=8)
     role: AdminRole
-    is_active: Optional[bool] = True
 
     class Config:
         json_schema_extra = {
@@ -38,7 +37,6 @@ class AdminCreate(AdminBase):
                 "phone_number": "0827398875",
                 "password": "strongpassword123",
                 "role": "support_admin",
-                "is_active": True
             }
         }
 
@@ -47,8 +45,6 @@ class AdminInDB(AdminBase):
     admin_id: str
     password_hash: str
     role: AdminRole
-    is_active: bool
-    last_login: datetime
     created_at: datetime
 
     class Config:
@@ -58,8 +54,6 @@ class AdminInDB(AdminBase):
 class AdminResponse(AdminBase):
     admin_id: str
     role: AdminRole
-    is_active: bool
-    last_login: Optional[datetime] = None
     created_at: datetime
 
     class Config:
@@ -73,7 +67,7 @@ class AdminUpdate(BaseModel):
     phone_number: Optional[str] = Field(None, min_length=10, max_length=10, pattern=r"^[0-9]{10}$")
     password: Optional[str] = Field(None, min_length=8)
     role: Optional[AdminRole] = None
-    is_active: Optional[bool] = None
+    current_admin_id: str
 
     @field_validator('phone_number')
     def validate_phone_number(cls, v):
@@ -90,7 +84,7 @@ class AdminUpdate(BaseModel):
                 "phone_number": "0827398875",
                 "password": "strongpassword123",
                 "role": "support_admin",
-                "is_active": True
+                "current_admin_id": "uuid of the current admin"
             }
         }
 

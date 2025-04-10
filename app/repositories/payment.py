@@ -14,25 +14,25 @@ class PaymentRepository:
     def record_to_payment(record: Record) -> PaymentInDB:
         """"""
         return PaymentInDB(
-            booking_id=record["booking_id"],
-            client_id=record["client_id"],
-            technician_id=record["technician_id"],
+            booking_id=str(record["booking_id"]),
+            client_id=str(record["client_id"]),
+            technician_id=str(record["technician_id"]),
             amount=record["amount"],
             payment_method=record["payment_method"],
             payment_status=record["payment_status"],
-            payment_id=record["payment_id"],
+            payment_id=str(record["payment_id"]),
             transaction_date=record["transaction_date"]
         )
     
     async def get_all_payments(self) -> List[PaymentInDB]:
         """"""
-        records = await self.db.fetch("SELECT * FROM payments")
+        records = await self.db.fetch("SELECT * FROM payment")
         return [PaymentRepository.record_to_payment(p) for p in records]
     
     async def get_payment_by_id(self, payment_id: str) -> Optional[PaymentInDB]:
         """"""
         record = await self.db.fetchrow(
-            "SELECT * FROM payments WHERE payment_id = $1", uuid.UUID(payment_id)
+            "SELECT * FROM payment WHERE payment_id = $1", uuid.UUID(payment_id)
             )
         return PaymentRepository.record_to_payment(record) if record is not None else None
     
@@ -58,14 +58,14 @@ class PaymentRepository:
     
     async def _get_all_by(self, column_name: str, value: Any) -> List[PaymentInDB]:
         """"""
-        records = await self.db.fetch(f"SELECT * FROM payments WHERE {column_name} = $1", value)
+        records = await self.db.fetch(f"SELECT * FROM payment WHERE {column_name} = $1", value)
         return [PaymentRepository.record_to_payment(p) for p in records]
     
     async def create(self, payment_data: PaymentCreate) -> PaymentInDB:
         """"""
         id = await self.db.fetchrow(
             """
-            INSERT INTO payments (
+            INSERT INTO payment (
                 booking_id, technician_id, client_id, amount, payment_method,
                 payment_status
             )
@@ -97,7 +97,7 @@ class PaymentRepository:
         values: list = [uuid.UUID(payment_id), *tuple(fields.values())]
 
         query: str = f"""
-        UPDATE payments SET {', '.join(updates)}
+        UPDATE payment SET {', '.join(updates)}
         WHERE payment_id = $1
         """
 
@@ -106,4 +106,4 @@ class PaymentRepository:
     
     async def delete(self, payment_id: str) -> bool:
         """"""
-        await self.db.execute("DELETE FROM payments WHERE payment_id = $1", uuid.UUID(payment_id))
+        await self.db.execute("DELETE FROM payment WHERE payment_id = $1", uuid.UUID(payment_id))

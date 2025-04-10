@@ -14,24 +14,24 @@ class ReviewRepository:
     def record_to_review(record: Record) -> ReviewInDB:
         """"""
         return ReviewInDB(
-            booking_id=record["booking_id"],
-            client_id=record["client_id"],
-            technician_id=record["technician_id"],
+            booking_id=str(record["booking_id"]),
+            client_id=str(record["client_id"]),
+            technician_id=str(record["technician_id"]),
             rating=record["rating"],
             comment=record["comment"],
-            review_id=record["review_id"],
+            review_id=str(record["review_id"]),
             created_at=record["created_at"]
         )
 
     async def get_all_reviews(self) -> List[ReviewInDB]:
         """"""
-        records = await self.db.fetch("SELECT * FROM reviews")
+        records = await self.db.fetch("SELECT * FROM review")
         return [ReviewRepository.record_to_review(r) for r in records]
 
     async def get_review_by_id(self, review_id: str) -> Optional[ReviewInDB]:
         """"""
         record = await self.db.fetchrow(
-            "SELECT * FROM reviews WHERE review_id = $1",
+            "SELECT * FROM review WHERE review_id = $1",
             uuid.UUID(review_id)
             )
         return ReviewRepository.record_to_review(record) if record is not None else None
@@ -51,7 +51,7 @@ class ReviewRepository:
     async def _get_by(self, column_name: str, value: Any) -> List[ReviewInDB]:
         """"""
         records = await self.db.fetch(
-            f"SELECT * FROM reviews WHERE {column_name} = $1",
+            f"SELECT * FROM review WHERE {column_name} = $1",
             value
             )
         return [ReviewRepository.record_to_review(r) for r in records]
@@ -60,7 +60,7 @@ class ReviewRepository:
         """"""
         id = await self.db.fetchrow(
             """
-            INSERT INTO reviews (
+            INSERT INTO review (
                 booking_id, client_id, technician_id,
                 rating, comment
             )
@@ -78,7 +78,7 @@ class ReviewRepository:
     async def delete_review(self, review_id: str) -> bool:
         """"""
         result = await self.db.execute(
-            "DELETE FROM reviews WHERE review_id = $1",
+            "DELETE FROM review WHERE review_id = $1",
             uuid.UUID(review_id)
             )
         return result == "DELETE 0"
@@ -98,7 +98,7 @@ class ReviewRepository:
         values: list = [uuid.UUID(review_id), *tuple(fields.values())]
 
         query: str = f"""
-        UPDATE reviews SET {', '.join(updates)}
+        UPDATE review SET {', '.join(updates)}
         WHERE review_id = $1
         """
 

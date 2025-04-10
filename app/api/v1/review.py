@@ -8,7 +8,7 @@ from app.database.database import AsyncDatabase
 router: APIRouter = APIRouter()
 
 async def get_db(request: Request) -> AsyncDatabase:
-    return request.app.db
+    return request.app.state.db
 
 async def get_review_repository(db: AsyncDatabase = Depends(get_db)) -> ReviewRepository:
     return ReviewRepository(db)

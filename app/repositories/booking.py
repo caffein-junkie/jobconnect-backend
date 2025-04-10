@@ -15,27 +15,27 @@ class BookingRepository:
     def record_to_booking(record: Record) -> BookingInDB:
         """"""
         return BookingInDB(
-            client_id=record["client_id"],
-            technician_id=record["technician_id"],
+            client_id=str(record["client_id"]),
+            technician_id=str(record["technician_id"]),
             service_type=record["service_type"],
             description=record["description"],
             price=record["price"],
             status=record["status"],
             start_date=record["start_date"],
             end_date=record["end_date"],
-            booking_id=record["booking_id"],
+            booking_id=str(record["booking_id"]),
             created_at=record["created_at"]
         )
     
     async def get_all_bookings(self) -> List[BookingInDB]:
         """"""
-        records = await self.db.fetch("SELECT * FROM bookings")
+        records = await self.db.fetch("SELECT * FROM booking")
         return [BookingRepository.record_to_booking(r) for r in records]
     
     async def get_booking_by_id(self, booking_id: str) -> Optional[BookingInDB]:
         """"""
         records = await self.db.fetchrow(
-            f"SELECT * FROM bookings WHERE booking_id = $1",
+            f"SELECT * FROM booking WHERE booking_id = $1",
             uuid.UUID(booking_id)
             )
         return [BookingRepository.record_to_booking(r) for r in records]
@@ -59,7 +59,7 @@ class BookingRepository:
     async def _get_by(self, column_name: str, value: Any) -> List[BookingInDB]:
         """"""
         records = await self.db.fetch(
-            f"SELECT * FROM bookings WHERE {column_name} = $1",
+            f"SELECT * FROM booking WHERE {column_name} = $1",
             value
             )
         return [BookingRepository.record_to_booking(r) for r in records]
@@ -80,7 +80,7 @@ class BookingRepository:
 
         await self.db.execute(
             f"""
-            UPDATE bookings SET {', '.join(updates)}
+            UPDATE booking SET {', '.join(updates)}
             WHERE booking_id = $1
             """,
             *values
@@ -89,13 +89,13 @@ class BookingRepository:
     
     async def delete_booking(self, booking_id: str) -> bool:
         """"""
-        result = await self.db.execute("DELETE FROM bookings WHERE booking_id = $1", booking_id)
+        result = await self.db.execute("DELETE FROM booking WHERE booking_id = $1", booking_id)
         return result == "DELETE 0"
     
     async def create(self, booking_data: BookingCreate) -> BookingInDB:
         """"""
         query: str = """
-        INSERT INTO bookings
+        INSERT INTO booking
             (client_id, technician_id, service_type, description,
             price, status, start_date, end_date)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

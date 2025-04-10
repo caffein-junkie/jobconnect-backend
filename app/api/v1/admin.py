@@ -54,11 +54,10 @@ async def delete_admin(
 async def update_admin(
     admin_id: str,
     update_data: AdminUpdate,
-    current_admin: AdminInDB,
     service: AdminService = Depends(get_admin_service)
 ):
     """"""
-    return await service.update_admin(admin_id, update_data, current_admin)
+    return await service.update_admin(admin_id, update_data)
 
 
 @router.get("/admin", response_model=List[AdminResponse])

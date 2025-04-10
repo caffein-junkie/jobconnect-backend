@@ -31,6 +31,7 @@ async def lifespan(app: FastAPI):
     await app.state.db.connect()
     # await app.state.db.drop_tables()
     await app.state.db.initdb()
+    # await app.state.db.populate_with_dummy_data()
 
     yield
 

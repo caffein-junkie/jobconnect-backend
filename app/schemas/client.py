@@ -13,7 +13,6 @@ class ClientBase(BaseModel):
     location_name: str
     latitude: Latitude
     longitude: Longitude
-    is_active: Optional[bool] = True
 
     @field_validator('phone_number')
     def validate_phone_number(cls, v):
@@ -36,7 +35,6 @@ class ClientCreate(ClientBase):
                 "location_name": "Soshanguve",
                 "latitude": 40.7128,
                 "longitude": -74.0060,
-                "is_active": True
             }
         }
 
@@ -44,7 +42,6 @@ class ClientInDB(ClientBase):
     """Database representation (includes sensitive fields)"""
     client_id: str
     password_hash: str
-    last_login: Optional[datetime] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -52,7 +49,6 @@ class ClientInDB(ClientBase):
 class ClientResponse(ClientBase):
     """What's returned to the client (excludes sensitive data)"""
     client_id: str
-    last_login: Optional[datetime] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -67,7 +63,6 @@ class ClientUpdate(BaseModel):
     location_name: Optional[str] = None
     latitude: Optional[Latitude] = None
     longitude: Optional[Longitude] = None
-    is_active: Optional[bool] = None
 
     @field_validator('phone_number')
     def validate_phone_number(cls, v):

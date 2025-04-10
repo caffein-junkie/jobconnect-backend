@@ -30,12 +30,11 @@ class TechnicianService:
             longitude=technician.longitude,
             latitude=technician.latitude,
             service_types=technician.service_types,
-            average_rating=technician.average_rating,
             is_verified=technician.is_verified,
-            is_active=technician.is_active,
             technician_id=technician.technician_id,
-            last_login=technician.last_login,
-            created_at=technician.created_at
+            created_at=technician.created_at,
+            experience_years=technician.experience_years,
+            is_available=technician.is_available
         )
     
     async def get_all_technicians(self) -> List[TechnicianResponse]:
@@ -74,18 +73,15 @@ class TechnicianService:
         """"""
         updated_technician = await self.repo.update(technician_id, update_data)
         return TechnicianService.technician_in_db_to_response(updated_technician)
-    
-    async def deactivate(self, technician_id: str) -> bool:
-        """"""
-        return await self.repo.deactivate(technician_id)
 
     async def authenticate_technician_with_email_and_password(self, email: str, password: str) -> TechnicianResponse:
         """"""
-        technician = await self.repo.get_by_email(email)
-        if not technician:
-            raise InvalidCredentialsException()
-        if not SecurityUtils.verify_password(password, technician.password_hash):
-            raise InvalidCredentialsException()
-        if not technician.is_active:
-            raise InvalidCredentialsException("Client account is inactive")
-        return TechnicianService.technician_in_db_to_response(technician)
+        raise NotImplementedError("authentication has not been implemented yet.")
+        # technician = await self.repo.get_by_email(email)
+        # if not technician:
+        #     raise InvalidCredentialsException()
+        # if not SecurityUtils.verify_password(password, technician.password_hash):
+        #     raise InvalidCredentialsException()
+        # if not technician.is_active:
+        #     raise InvalidCredentialsException("Client account is inactive")
+        # return TechnicianService.technician_in_db_to_response(technician)

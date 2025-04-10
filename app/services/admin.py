@@ -4,7 +4,6 @@ from app.repositories.admin import AdminRepository
 from app.utils.exceptions import (
     NotFoundException,
     InvalidCredentialsException,
-    DuplicateEntryException
 )
 from app.utils.security import SecurityUtils
 
@@ -24,8 +23,6 @@ class AdminService:
             phone_number=admin.phone_number,
             admin_id=admin.admin_id,
             role=admin.role,
-            is_active=admin.is_active,
-            last_login=admin.last_login,
             created_at=admin.created_at
         )
         return response
@@ -59,23 +56,16 @@ class AdminService:
             raise InvalidCredentialsException()
         if not SecurityUtils.verify_password(password, admin.password_hash):
             raise InvalidCredentialsException()
-        if not admin.is_active:
-            raise InvalidCredentialsException("Admin account is inactive")
         return AdminService.admin_in_db_to_response(admin)
     
     async def update_admin(
         self,
         admin_id: str,
         update_data: AdminUpdate,
-        current_admin: AdminInDB
         ) -> AdminResponse:
         """"""
-        admin = await self.repo.update(admin_id, update_data, current_admin)
+        admin = await self.repo.update(admin_id, update_data)
         return AdminService.admin_in_db_to_response(admin)
-    
-    async def deactivate_admin(self, admin_id: str) -> None:
-        """"""
-        await self.repo.deactivate(admin_id)
     
     async def delete_admin(self, admin_id: str) -> None:
         """"""

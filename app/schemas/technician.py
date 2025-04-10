@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
 from pydantic_extra_types.coordinate import Latitude, Longitude
-from enum import Enum
 import re
 
 class TechnicianBase(BaseModel):
@@ -15,9 +14,9 @@ class TechnicianBase(BaseModel):
     latitude: Latitude
     longitude: Longitude
     service_types: List[str] = Field(..., min_length=1)
-    average_rating: float = Field(0.00, ge=0.00, le=5.00)
     is_verified: bool = False
-    is_active: bool = True
+    is_available: bool = True
+    experience_years: int = Field(..., ge=0)
 
     @field_validator('phone_number')
     def validate_phone_number(cls, v):
@@ -39,24 +38,23 @@ class TechnicianCreate(TechnicianBase):
         json_schema_extra={
             "example": {
                 "name": "John",
-                "surname": "Doe",
+                "surname": "Matlala",
                 "email": "tech@example.com",
-                "phone_number": "1234567890",
+                "phone_number": "0667651235",
                 "password": "securepassword123",
-                "location_name": "Main Workshop",
+                "location_name": "Soshanguve",
                 "latitude": 40.7128,
                 "longitude": -74.0060,
                 "service_types": ["plumbing", "electrical"],
-                "is_verified": False
+                "is_available": True
             }
         }
     )
 
 class TechnicianInDB(TechnicianBase):
     """Database representation (includes sensitive fields)"""
-    technician_id: str  # UUID as string
+    technician_id: str
     password_hash: str
-    last_login: Optional[datetime] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -80,9 +78,9 @@ class TechnicianUpdate(BaseModel):
     latitude: Optional[Latitude] = None
     longitude: Optional[Longitude] = None
     service_types: Optional[List[str]] = None
-    average_rating: Optional[float] = Field(None, ge=0.00, le=5.00)
     is_verified: Optional[bool] = None
-    is_active: Optional[bool] = None
+    is_available: Optional[bool] = None
+    experience_years: Optional[int] = None
 
     @field_validator('phone_number')
     def validate_phone_number(cls, v):

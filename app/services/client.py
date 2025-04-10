@@ -24,9 +24,7 @@ class ClientService:
             location_name=client.location_name,
             longitude=client.longitude,
             latitude=client.latitude,
-            is_active=client.is_active,
             client_id=client.client_id,
-            last_login=client.last_login,
             created_at=client.created_at
         )
     
@@ -58,18 +56,13 @@ class ClientService:
     async def delete_client(self, client_id: str) -> None:
         """"""
         await self.repo.delete(client_id)
-    
-    async def deactivate_client(self, client_id: str) -> None:
-        """"""
-        await self.repo.deactivate(client_id)
 
     async def authenticate_client_with_email_and_password(self, email: str, password: str) -> ClientResponse:
         """"""
-        client = await self.repo.get_by_email(email)
-        if not client:
-            raise InvalidCredentialsException()
-        if not SecurityUtils.verify_password(password, client.password_hash):
-            raise InvalidCredentialsException()
-        if not client.is_active:
-            raise InvalidCredentialsException("Client account is inactive")
-        return ClientService.client_in_db_to_response(client)
+        raise NotImplementedError("authentication has not been implemented yet")
+        # client = await self.repo.get_by_email(email)
+        # if not client:
+        #     raise InvalidCredentialsException()
+        # if not SecurityUtils.verify_password(password, client.password_hash):
+        #     raise InvalidCredentialsException()
+        # return ClientService.client_in_db_to_response(client)

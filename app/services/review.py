@@ -25,12 +25,12 @@ class ReviewService:
     async def get_all_reviews(self) -> List[ReviewResponse]:
         """"""
         reviews = await self.repo.get_all_reviews()
-        return [ReviewService.review_to_response(r) for r in reviews]
+        return [ReviewService.review_in_db_to_response(r) for r in reviews]
     
     async def get_review_by_id(self, review_id: str) -> Optional[ReviewResponse]:
         """"""
         reviews = await self.repo.get_review_by_id(review_id)
-        return [ReviewService.review_to_response(r) for r in reviews]
+        return [ReviewService.review_in_db_to_response(r) for r in reviews]
     
     async def get_all_reviews_by(self, column_name: str, value: Any) -> List[ReviewResponse]:
         """"""

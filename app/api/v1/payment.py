@@ -8,7 +8,7 @@ from app.database.database import AsyncDatabase
 router: APIRouter = APIRouter()
 
 async def get_db(request: Request) -> AsyncDatabase:
-    return request.app.db
+    return request.app.state.db
 
 async def get_payment_repository(db: AsyncDatabase = Depends(get_db)) -> PaymentRepository:
     return PaymentRepository(db)

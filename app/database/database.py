@@ -4,8 +4,11 @@ from typing import Final
 import asyncpg
 import logging
 
-DATABASE_SCRIPT: Final[Path] = Path(__file__).parent / "jobconnect.sql"
 LOGGER = logging.getLogger(__name__)
+
+BASE_PATH: Final[Path] = Path(__file__).parent
+DATABASE_SCRIPT: Final[Path] = BASE_PATH / "jobconnect.sql"
+DUMMY_DATA_SCRIPT: Final[Path] = BASE_PATH / "dummy_data.sql"
 
 
 class AsyncDatabase:
@@ -78,25 +81,14 @@ class AsyncDatabase:
     async def drop_tables(self) -> None:
         """"""
         query = """
-        DROP TABLE IF EXISTS admins CASCADE;
-        DROP TABLE IF EXISTS clients CASCADE;
-        DROP TABLE IF EXISTS technicians CASCADE;
-        DROP TABLE IF EXISTS bookings CASCADE;
-        DROP TABLE IF EXISTS ratings CASCADE;
-        DROP TABLE IF EXISTS payments CASCADE;
-        DROP TABLE IF EXISTS notifications CASCADE;
-        DROP TABLE IF EXISTS favorite_technicians CASCADE;
-        DROP TABLE IF EXISTS favorite_technicians CASCADE;
-        DROP TABLE IF EXISTS technician_availability;
-        DROP TABLE IF EXISTS conversations CASCADE;
-        DROP TABLE IF EXISTS messages CASCADE;
-        DROP TABLE IF EXISTS disputes CASCADE;
-        DROP TABLE IF EXISTS dispute_attachments CASCADE;
-        DROP TABLE IF EXISTS dispute_comments CASCADE;
-        DROP TABLE IF EXISTS password_reset_tokens CASCADE;
-        DROP TABLE IF EXISTS technician_service_areas CASCADE;
-        DROP TABLE IF EXISTS service_zones CASCADE;
-        DROP TABLE IF EXISTS service_categories CASCADE;
+        DROP TABLE IF EXISTS admin CASCADE;
+        DROP TABLE IF EXISTS client CASCADE;
+        DROP TABLE IF EXISTS technician CASCADE;
+        DROP TABLE IF EXISTS booking CASCADE;
+        DROP TABLE IF EXISTS rating CASCADE;
+        DROP TABLE IF EXISTS payment CASCADE;
+        DROP TABLE IF EXISTS notification CASCADE;
+        DROP TABLE IF EXISTS favorite_technician CASCADE;
         """
         try:
             await self.execute(query)
@@ -105,3 +97,12 @@ class AsyncDatabase:
         except Exception as e:
             LOGGER.error(f"COULD NOT DROP TABLES: {e}")
             raise
+
+    async def populate_with_dummy_data(self) -> None:
+        """"""
+        try:
+            sql: str = DUMMY_DATA_SCRIPT.read_text()
+            await self.execute(sql)
+            LOGGER.info("SUCCESSFULLY CREATED THE DUMMY DATA")
+        except Exception as e:
+            LOGGER.error(f"FAILED TO CREATE DUMMY DATA: {e}")

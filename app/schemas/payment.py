@@ -6,7 +6,6 @@ from enum import Enum
 
 # Enums for better validation
 class PaymentMethod(str, Enum):
-    CASH = "cash"
     CARD = "card"
     BANKING = "banking"
 
@@ -29,7 +28,7 @@ class PaymentBase(BaseModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "booking_id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
                 "client_id": "b1ffc99-9c0b-4ef8-bb6d-6bb9bd380a22",
@@ -43,7 +42,7 @@ class PaymentBase(BaseModel):
 
 class PaymentCreate(PaymentBase):
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "booking_id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
                 "client_id": "b1ffc99-9c0b-4ef8-bb6d-6bb9bd380a22",
@@ -57,10 +56,10 @@ class PaymentCreate(PaymentBase):
 
 class PaymentInDB(PaymentBase):
     payment_id: str = Field(..., description="Unique identifier for the payment")
-    transaction_date: datetime = Field(..., description="Timestamp when payment was processed")
+    transaction_date: Optional[datetime] = Field(..., description="Timestamp when payment was processed")
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "payment_id": "d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
                 "booking_id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
@@ -76,10 +75,10 @@ class PaymentInDB(PaymentBase):
 
 class PaymentResponse(PaymentBase):
     payment_id: str = Field(..., description="Unique identifier for the payment")
-    transaction_date: datetime = Field(..., description="Timestamp when payment was processed")
+    transaction_date: Optional[datetime] = Field(..., description="Timestamp when payment was processed")
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "payment_id": "d3eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
                 "booking_id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
@@ -99,7 +98,7 @@ class PaymentUpdate(BaseModel):
     payment_status: Optional[PaymentStatus] = Field(None, description="Updated payment status")
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "amount": 89.99,  # after discount
                 "payment_status": "completed"  # marking as paid
