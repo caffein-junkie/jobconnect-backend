@@ -78,9 +78,13 @@ CREATE TABLE IF NOT EXISTS payment (
 CREATE TABLE IF NOT EXISTS notification (
     notification_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     message TEXT NOT NULL,
-    recipient_id uuid NOT NULL,
+    client_id uuid REFERENCES client(client_id),
+    technician_id uuid REFERENCES technician(technician_id),
     is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT chk_recipient CHECK (
+    (client_id IS NOT NULL AND technician_id IS NULL) OR
+    (client_id IS NULL AND technician_id IS NOT NULL))
 );
 
 CREATE TABLE IF NOT EXISTS favorite_technician (
@@ -122,7 +126,8 @@ CREATE INDEX IF NOT EXISTS idx_payment_technician_id ON payment(technician_id);
 CREATE INDEX IF NOT EXISTS idx_payment_status ON payment(payment_status);
 
 -- Notification indexes
-CREATE INDEX IF NOT EXISTS idx_notification_recipient ON notification(recipient_id);
+CREATE INDEX IF NOT EXISTS idx_notification_client ON notification(client_id) WHERE client_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_notification_technician ON notification(technician_id) WHERE technician_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_notification_read_status ON notification(is_read);
 
 -- Favorite technician indexes

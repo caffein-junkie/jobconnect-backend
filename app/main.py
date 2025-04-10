@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
         port=settings.DB_PORT
     )
     await app.state.db.connect()
-    # await app.state.db.drop_tables()
+    await app.state.db.drop_tables()
     await app.state.db.initdb()
     # await app.state.db.populate_with_dummy_data()
 
