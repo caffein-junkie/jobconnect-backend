@@ -46,7 +46,8 @@ class TechnicianCreate(TechnicianBase):
                 "latitude": 40.7128,
                 "longitude": -74.0060,
                 "service_types": ["plumbing", "electrical"],
-                "is_available": True
+                "is_available": True,
+                "experience_years": 4,
             }
         }
     )
@@ -62,7 +63,6 @@ class TechnicianInDB(TechnicianBase):
 class TechnicianResponse(TechnicianBase):
     """What's returned to the client (excludes sensitive data)"""
     technician_id: str
-    last_login: Optional[datetime] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

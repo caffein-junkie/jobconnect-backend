@@ -2,6 +2,8 @@ from typing import List
 from app.schemas.client import ClientInDB, ClientResponse, ClientUpdate, ClientCreate
 from app.repositories.client import ClientRepository
 from app.utils.security import SecurityUtils
+from app.services.favorite_technician import FavoriteTechnicianService
+from app.schemas.favorite_technician import FavoriteTechnicianCreate, FavoriteTechnicianResponse
 from app.utils.exceptions import (
     NotFoundException,
     InvalidCredentialsException
@@ -66,3 +68,19 @@ class ClientService:
         # if not SecurityUtils.verify_password(password, client.password_hash):
         #     raise InvalidCredentialsException()
         # return ClientService.client_in_db_to_response(client)
+    
+    async def add_favorite_technician(
+            self,
+            ft: FavoriteTechnicianCreate,
+            favorite_technicians_service: FavoriteTechnicianService
+            ) -> FavoriteTechnicianResponse:
+        """"""
+        return await favorite_technicians_service.create_favorite_technician(ft)
+    
+    async def remove_favorite_technician(
+            self,
+            client_id: str,
+            favorite_technicians_service: FavoriteTechnicianService
+    ) -> None:
+        """"""
+        await favorite_technicians_service.detete_favorite_technician(client_id)

@@ -8,16 +8,16 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 DO $$
 DECLARE
     -- Admin IDs
-    admin1_id UUID := uuid_generate_v4();
-    admin2_id UUID := uuid_generate_v4();
-    admin3_id UUID := uuid_generate_v4();
-    admin4_id UUID := uuid_generate_v4();
-    admin5_id UUID := uuid_generate_v4();
-    admin6_id UUID := uuid_generate_v4();
-    admin7_id UUID := uuid_generate_v4();
-    admin8_id UUID := uuid_generate_v4();
-    admin9_id UUID := uuid_generate_v4();
-    admin10_id UUID := uuid_generate_v4();
+    -- admin1_id UUID := uuid_generate_v4();
+    -- admin2_id UUID := uuid_generate_v4();
+    -- admin3_id UUID := uuid_generate_v4();
+    -- admin4_id UUID := uuid_generate_v4();
+    -- admin5_id UUID := uuid_generate_v4();
+    -- admin6_id UUID := uuid_generate_v4();
+    -- admin7_id UUID := uuid_generate_v4();
+    -- admin8_id UUID := uuid_generate_v4();
+    -- admin9_id UUID := uuid_generate_v4();
+    -- admin10_id UUID := uuid_generate_v4();
     
     -- Client IDs
     client1_id UUID := uuid_generate_v4();
@@ -83,17 +83,17 @@ DECLARE
 BEGIN
 
 -- ADMIN DATA
-INSERT INTO admin (admin_id, name, surname, email, phone_number, password_hash, role) VALUES
-(admin1_id, 'Thabo', 'Mbeki', 'thabo.mbeki@jobconnect.co.za', '0821234567', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'super_admin'),
-(admin2_id, 'Nkosazana', 'Dlamini', 'nkosazana.d@jobconnect.co.za', '0822345678', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
-(admin3_id, 'Cyril', 'Ramaphosa', 'cyril.r@jobconnect.co.za', '0823456789', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
-(admin4_id, 'Trevor', 'Noah', 'trevor.n@jobconnect.co.za', '0824567890', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
-(admin5_id, 'Charlize', 'Theron', 'charlize.t@jobconnect.co.za', '0825678901', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
-(admin6_id, 'Siya', 'Kolisi', 'siya.k@jobconnect.co.za', '0826789012', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
-(admin7_id, 'Bonang', 'Matheba', 'bonang.m@jobconnect.co.za', '0827890123', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
-(admin8_id, 'Kagiso', 'Rabada', 'kagiso.r@jobconnect.co.za', '0828901234', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
-(admin9_id, 'Nomzamo', 'Mbatha', 'nomzamo.m@jobconnect.co.za', '0829012345', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
-(admin10_id, 'Black', 'Coffee', 'black.c@jobconnect.co.za', '0820123456', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin');
+-- INSERT INTO admin (admin_id, name, surname, email, phone_number, password_hash, role) VALUES
+-- (admin1_id, 'Thabo', 'Mbeki', 'thabo.mbeki@jobconnect.co.za', '0821234567', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'super_admin'),
+-- (admin2_id, 'Nkosazana', 'Dlamini', 'nkosazana.d@jobconnect.co.za', '0822345678', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
+-- (admin3_id, 'Cyril', 'Ramaphosa', 'cyril.r@jobconnect.co.za', '0823456789', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
+-- (admin4_id, 'Trevor', 'Noah', 'trevor.n@jobconnect.co.za', '0824567890', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
+-- (admin5_id, 'Charlize', 'Theron', 'charlize.t@jobconnect.co.za', '0825678901', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
+-- (admin6_id, 'Siya', 'Kolisi', 'siya.k@jobconnect.co.za', '0826789012', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
+-- (admin7_id, 'Bonang', 'Matheba', 'bonang.m@jobconnect.co.za', '0827890123', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
+-- (admin8_id, 'Kagiso', 'Rabada', 'kagiso.r@jobconnect.co.za', '0828901234', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin'),
+-- (admin9_id, 'Nomzamo', 'Mbatha', 'nomzamo.m@jobconnect.co.za', '0829012345', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'content_admin'),
+-- (admin10_id, 'Black', 'Coffee', 'black.c@jobconnect.co.za', '0820123456', '$2b$12$E9Q3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5OeQ3bX5Z5O3Z5O3Z5O3Z5O', 'support_admin');
 
 -- CLIENT DATA
 INSERT INTO client (client_id, name, surname, email, phone_number, password_hash, location_name, location) VALUES
@@ -160,11 +160,21 @@ INSERT INTO payment (payment_id, booking_id, client_id, technician_id, amount, p
 (payment3_id, booking7_id, client7_id, tech7_id, 300.00, 'card', 'completed', '2023-11-22 11:30:00');
 
 -- NOTIFICATION DATA
-INSERT INTO notification (notification_id, message, recipient_id, is_read, created_at) VALUES
-(notif1_id, 'Your booking with Jacob Zuma has been confirmed', client1_id, TRUE, NOW()),
-(notif2_id, 'Payment of R450.00 received for your plumbing service', client1_id, FALSE, NOW()),
-(notif3_id, 'Reminder: Your painting appointment starts in 2 hours', client2_id, FALSE, NOW()),
-(notif4_id, 'Please rate your recent service with Tokyo Sexwale', client5_id, TRUE, NOW()),
-(notif5_id, 'New technician available in your area: Baleka Mbete', client3_id, FALSE, NOW());
+INSERT INTO notification (
+    notification_id, message, client_id, technician_id, is_read, created_at
+) VALUES
+    -- Existing client notifications
+    (notif1_id, 'Your booking with Jacob Zuma has been confirmed', client1_id, NULL, TRUE, NOW()),
+    (notif2_id, 'Payment of R450.00 received for your plumbing service', client1_id, NULL, FALSE, NOW()),
+    (notif3_id, 'Reminder: Your painting appointment starts in 2 hours', client2_id, NULL, FALSE, NOW()),
+    (notif4_id, 'Please rate your recent service with Tokyo Sexwale', client5_id, NULL, TRUE, NOW()),
+    (notif5_id, 'New technician available in your area: Baleka Mbete', client3_id, NULL, FALSE, NOW()),
+
+    -- New technician notifications
+    (notif6_id, 'New job request from John Doe', NULL, technician1_id, FALSE, NOW()),
+    (notif7_id, 'Your appointment with Sarah Smith is scheduled for tomorrow at 10:00 AM', NULL, technician2_id, FALSE, NOW()),
+    (notif8_id, 'Payment of R550.00 has been processed for your service with Mike Mahlaba', NULL, technician1_id, TRUE, NOW()),
+    (notif9_id, 'Reminder: Plumbing service for Peter Nkosi starts in 1 hour', NULL, technician3_id, FALSE, NOW()),
+    (notif10_id, 'Client Lindiwe Zulu has rated your service 5 stars', NULL, technician2_id, TRUE, NOW());
 
 END $$;

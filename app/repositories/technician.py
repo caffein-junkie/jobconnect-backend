@@ -143,7 +143,7 @@ class TechnicianRepository:
     async def delete(self, technician_id: str) -> bool:
         """"""
         await self.db.execute(
-            "DELETE FROM technician WHERE technician_id = $ 1",
+            "DELETE FROM technician WHERE technician_id = $1",
             uuid.UUID(technician_id)
             )
     

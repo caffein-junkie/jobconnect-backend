@@ -6,6 +6,8 @@ class FavoriteTechnicianBase(BaseModel):
     client_id: str
     technician_id: str
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class FavoriteTechnicianCreate(FavoriteTechnicianBase):
 
@@ -17,11 +19,16 @@ class FavoriteTechnicianCreate(FavoriteTechnicianBase):
             }
         }
 
+
+class FavoriteTechnicianInDB(FavoriteTechnicianBase):
+    favorite_id: str
+    created_at: datetime
+
     model_config = ConfigDict(from_attributes=True)
 
 
-class FavoriteTechnicianInDB(FavoriteTechnicianBase):
-    id: str
+class FavoriteTechnicianResponse(FavoriteTechnicianBase):
+    favorite_id: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

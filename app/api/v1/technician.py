@@ -27,7 +27,7 @@ async def get_technician(
     service: TechnicianService = Depends(get_technician_service)
     ):
     """"""
-    return await service.get_technician(technician_id)
+    return await service.get_technician_by_id(technician_id)
 
 
 @router.get("/technician", response_model=List[TechnicianResponse])

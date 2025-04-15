@@ -1,16 +1,16 @@
 CREATE EXTENSION IF NOT EXISTS "postgis";
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE IF NOT EXISTS admin (
-    admin_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(50) NOT NULL,
-    surname VARCHAR(50) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-    phone_number VARCHAR(10) NOT NULL UNIQUE CHECK (phone_number ~ '^[0-9]{10}$'),
-    password_hash TEXT NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK(role IN ('super_admin', 'support_admin', 'content_admin')),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+-- CREATE TABLE IF NOT EXISTS admin (
+--     admin_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+--     name VARCHAR(50) NOT NULL,
+--     surname VARCHAR(50) NOT NULL,
+--     email VARCHAR(255) NOT NULL UNIQUE CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+--     phone_number VARCHAR(10) NOT NULL UNIQUE CHECK (phone_number ~ '^[0-9]{10}$'),
+--     password_hash TEXT NOT NULL,
+--     role VARCHAR(20) NOT NULL CHECK(role IN ('super_admin', 'support_admin', 'content_admin')),
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+-- );
 
 CREATE TABLE IF NOT EXISTS client (
     client_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

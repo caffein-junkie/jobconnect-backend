@@ -63,7 +63,7 @@ class TechnicianService:
     
     async def delete_technician(self, technician_id: str) -> bool:
         """"""
-        return await self.repo.detele(technician_id)
+        return await self.repo.delete(technician_id)
     
     async def update_technician(
         self,

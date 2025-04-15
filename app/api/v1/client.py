@@ -4,6 +4,8 @@ from app.database.database import AsyncDatabase
 from app.schemas.client import ClientResponse, ClientCreate, ClientUpdate
 from app.repositories.client import ClientRepository
 from app.services.client import ClientService
+from app.schemas.favorite_technician import FavoriteTechnicianCreate, FavoriteTechnicianResponse
+from app.services.favorite_technician import FavoriteTechnicianService
 
 router: APIRouter = APIRouter()
 
